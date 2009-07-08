@@ -22,15 +22,11 @@ module Fleakr
       #   => #<Fleakr::Api::ValueParameter:0x1656da4 @include_in_signature=true, @name="foo", @value="bar">
       #
       def initialize(options = {})
-        # TODO: need to find a way to move the unexpected behavior in Fleakr.token elsewhere
-        @api_options = options.extract!(:authenticate?)
-        
         @list = Hash.new
 
         options.each {|k,v| self << ValueParameter.new(k.to_s, v) }
 
         self << ValueParameter.new('api_key', Fleakr.api_key)
-        self << ValueParameter.new('auth_token', Fleakr.token.value) if authenticate?
       end
       
       # Add a new parameter (ValueParameter / FileParameter) to the list
@@ -45,14 +41,6 @@ module Fleakr
         !Fleakr.shared_secret.blank?
       end
       
-      # Should we send the auth_token with the request?
-      #
-      def authenticate?
-        @api_options.has_key?(:authenticate?) ? @api_options[:authenticate?] : !Fleakr.token.blank?
-      end
-      
-      # Access an individual parameter by key (symbol or string)
-      #
       def [](key)
         list[key.to_s]
       end

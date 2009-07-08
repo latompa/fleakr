@@ -85,7 +85,7 @@ module Fleakr
   # Generic catch-all exception for any API errors
   class ApiError < StandardError; end
 
-  mattr_accessor :api_key, :shared_secret, :mini_token, :auth_token, :frob
+  mattr_accessor :api_key, :shared_secret
 
   # Find a user based on some unique user data.  This method will try to find
   # the user based on username and will fall back to email if that fails.  Example:
@@ -138,34 +138,34 @@ module Fleakr
     Fleakr::Objects::Contact.find_all_contacts(params)
   end
 
-  # Get the authentication token needed for authenticated requests.  Will either use
-  # a valid auth_token (if available) or a mini-token to generate the auth_token.
-  #
-  def self.token
-    @token ||= begin
-      if Fleakr.auth_token
-        Fleakr::Objects::AuthenticationToken.from_auth_token(Fleakr.auth_token)
-      elsif Fleakr.frob
-        Fleakr::Objects::AuthenticationToken.from_frob(Fleakr.frob)
-      elsif Fleakr.mini_token
-        Fleakr::Objects::AuthenticationToken.from_mini_token(Fleakr.mini_token)
-      end
-    end
-  end
-  
-  # Reset the cached token whenever setting a new value for the mini_token, auth_token, or frob
-  #
-  [:mini_token, :auth_token, :frob].each do |attribute|
-    class_eval <<-ACCESSOR
-      def self.#{attribute}=(#{attribute})
-        reset_token
-        @@#{attribute} = #{attribute}
-      end
-    ACCESSOR
-  end
-
-  def self.reset_token # :nodoc: #
-    @token = nil
-  end
+  # # Get the authentication token needed for authenticated requests.  Will either use
+  # # a valid auth_token (if available) or a mini-token to generate the auth_token.
+  # #
+  # def self.token
+  #   @token ||= begin
+  #     if Fleakr.auth_token
+  #       Fleakr::Objects::AuthenticationToken.from_auth_token(Fleakr.auth_token)
+  #     elsif Fleakr.frob
+  #       Fleakr::Objects::AuthenticationToken.from_frob(Fleakr.frob)
+  #     elsif Fleakr.mini_token
+  #       Fleakr::Objects::AuthenticationToken.from_mini_token(Fleakr.mini_token)
+  #     end
+  #   end
+  # end
+  # 
+  # # Reset the cached token whenever setting a new value for the mini_token, auth_token, or frob
+  # #
+  # [:mini_token, :auth_token, :frob].each do |attribute|
+  #   class_eval <<-ACCESSOR
+  #     def self.#{attribute}=(#{attribute})
+  #       reset_token
+  #       @@#{attribute} = #{attribute}
+  #     end
+  #   ACCESSOR
+  # end
+  # 
+  # def self.reset_token # :nodoc: #
+  #   @token = nil
+  # end
   
 end

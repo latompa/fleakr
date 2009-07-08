@@ -86,42 +86,42 @@ module Fleakr::Api
         @parameter_list.sign?.should be(true)
       end
       
-      # should "know that it doesn't need to authenticate the request by default" do
-      #   @parameter_list.authenticate?.should be(false)
-      # end
+      should "know that it doesn't need to authenticate the request by default" do
+        @parameter_list.authenticate?.should be(false)
+      end
       
-      # should "know to authenticate the request when a token is available" do
-      #   Fleakr.stubs(:token).with().returns(stub(:value => 'toke'))
-      #   parameter_list = ParameterList.new
-      # 
-      #   parameter_list.authenticate?.should be(true)
-      # end
+      should "know to authenticate the request when a token is available" do
+        Fleakr.stubs(:token).with().returns(stub(:value => 'toke'))
+        parameter_list = ParameterList.new
+
+        parameter_list.authenticate?.should be(true)
+      end
       
-      # should "not authenticate the request if it's been specifically told not to" do
-      #   Fleakr.expects(:token).with().never
-      #   
-      #   parameter_list = ParameterList.new(:authenticate? => false)
-      #   parameter_list.authenticate?.should be(false)
-      # end
-      # 
+      should "not authenticate the request if it's been specifically told not to" do
+        Fleakr.expects(:token).with().never
+        
+        parameter_list = ParameterList.new(:authenticate? => false)
+        parameter_list.authenticate?.should be(false)
+      end
       
-      # should "know to authenticate the request when asked" do
-      #   Fleakr.expects(:token).with().returns(stub(:value => 'toke'))
-      #   
-      #   parameter_list = ParameterList.new(:authenticate? => true)
-      #   parameter_list.authenticate?.should be(true)
-      # end
       
-      # should "contain the :auth_token parameter in the list if the request is to be authenticated" do
-      #   Fleakr.expects(:token).with().returns(stub(:value => 'toke'))
-      #   
-      #   parameter_list = ParameterList.new(:authenticate? => true)
-      #   auth_param = parameter_list[:auth_token]
-      #   
-      #   auth_param.name.should == 'auth_token'
-      #   auth_param.value.should == 'toke'
-      #   auth_param.include_in_signature?.should be(true)
-      # end
+      should "know to authenticate the request when asked" do
+        Fleakr.expects(:token).with().returns(stub(:value => 'toke'))
+        
+        parameter_list = ParameterList.new(:authenticate? => true)
+        parameter_list.authenticate?.should be(true)
+      end
+      
+      should "contain the :auth_token parameter in the list if the request is to be authenticated" do
+        Fleakr.expects(:token).with().returns(stub(:value => 'toke'))
+        
+        parameter_list = ParameterList.new(:authenticate? => true)
+        auth_param = parameter_list[:auth_token]
+        
+        auth_param.name.should == 'auth_token'
+        auth_param.value.should == 'toke'
+        auth_param.include_in_signature?.should be(true)
+      end
       
       should "include the signature in the list of parameters if the request is to be signed" do
         parameter_list = ParameterList.new

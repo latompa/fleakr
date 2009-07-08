@@ -142,7 +142,7 @@ module Fleakr
   # a valid auth_token (if available) or a mini-token to generate the auth_token.
   #
   def self.token
-    @token ||= begin
+    Thread.current[:token] ||= begin
       if Fleakr.auth_token
         Fleakr::Objects::AuthenticationToken.from_auth_token(Fleakr.auth_token)
       elsif Fleakr.frob
@@ -158,12 +158,16 @@ module Fleakr
   [:mini_token, :auth_token, :frob].each do |attribute|
     class_eval <<-ACCESSOR
       def self.#{attribute}=(#{attribute})
-        reset_token
-        @@#{attribute} = #{attribute}
+        Thread.current[:#{attribute}] = #{attribute}
       end
+      
+      def self.#{attribute}
+        Thread.current[:#{attribute}]
+      end
+      
     ACCESSOR
   end
-
+  
   def self.reset_token # :nodoc: #
     @token = nil
   end

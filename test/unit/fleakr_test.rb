@@ -4,7 +4,7 @@ class FleakrTest < Test::Unit::TestCase
   
   context "The Fleakr module" do
     
-    [:api_key, :shared_secret].each do |attribute|
+    [:api_key, :shared_secret, :mini_token, :auth_token].each do |attribute|
       should "be able to set a value for :#{attribute}" do
         value = 'value'
         
@@ -74,98 +74,100 @@ class FleakrTest < Test::Unit::TestCase
       Fleakr.upload(filename, :title => 'bop bip').should == [new_image]
     end
     
-    # should "be able to reset the cached token" do
-    #    @token = stub()
-    #    Fleakr.expects(:auth_token).with().at_least_once.returns('abc123')
-    #    Fleakr::Objects::AuthenticationToken.expects(:from_auth_token).with('abc123').times(2).returns(@token)
-    #    Fleakr.token # once
-    #    Fleakr.reset_token
-    #    Fleakr.token # twice
-    #  end
-    #  
-    #  should "not have a token by default" do
-    #    Fleakr.expects(:mini_token).with().returns(nil)
-    #    Fleakr.expects(:auth_token).with().returns(nil)
-    #    Fleakr.expects(:frob).with().returns(nil)
-    #    
-    #    Fleakr.token.should be(nil)
-    #  end
-    #  
-    #  [:mini_token, :auth_token, :frob].each do |attribute|
-    #    should "reset_token when :#{attribute} is set" do
-    #      Fleakr.expects(:reset_token).with().at_least_once
-    #      Fleakr.send("#{attribute}=".to_sym, 'value')
-    #    end
-    #  end
+    should "be able to reset the cached token" do
+      @token = stub()
+      Fleakr.expects(:auth_token).with().at_least_once.returns('abc123')
+      Fleakr::Objects::AuthenticationToken.expects(:from_auth_token).with('abc123').times(2).returns(@token)
+      Fleakr.token # once
+      Fleakr.reset_token
+      Fleakr.token # twice
+    end
     
-   #  context "when generating an AuthenticationToken from an auth_token string" do
-   # 
-   #     setup do
-   #       @token = stub()
-   #       
-   #       Fleakr.expects(:auth_token).with().at_least_once.returns('abc123')
-   #       Fleakr::Objects::AuthenticationToken.expects(:from_auth_token).with('abc123').returns(@token)
-   #     end
-   # 
-   #     # Make sure to clear the cache
-   #     teardown { Fleakr.auth_token = nil }
-   #     
-   #     should "return the token" do
-   #       Fleakr.token.should == @token
-   #     end
-   #     
-   #     should "cache the result" do
-   #       2.times { Fleakr.token }
-   #     end
-   # 
-   #   end
-   #   
-   #   context "when generating an AuthenticationToken from a frob string" do
-   # 
-   #     setup do
-   #       @token = stub()
-   #       
-   #       Fleakr.expects(:auth_token).with().at_least_once.returns(nil)
-   #       Fleakr.expects(:frob).with().at_least_once.returns('abc123')
-   #       Fleakr::Objects::AuthenticationToken.expects(:from_frob).with('abc123').returns(@token)
-   #     end
-   # 
-   #     # Make sure to clear the cache
-   #     teardown { Fleakr.frob = nil }
-   #     
-   #     should "return the token" do
-   #       Fleakr.token.should == @token
-   #     end
-   #     
-   #     should "cache the result" do
-   #       2.times { Fleakr.token }
-   #     end
-   # 
-   #   end
-   #   
-   #   context "when generating an AuthenticationToken from a mini_token string" do
-   #     
-   #     setup do
-   #       @token = stub()
-   # 
-   #       Fleakr.expects(:auth_token).with().at_least_once.returns(nil)
-   #       Fleakr.expects(:mini_token).with().at_least_once.returns('123-123-123')
-   #       Fleakr::Objects::AuthenticationToken.expects(:from_mini_token).with('123-123-123').returns(@token)          
-   #     end
-   #     
-   #     # Make sure to clear the cache
-   #     teardown { Fleakr.mini_token = nil }
-   #     
-   #     should "return the token" do
-   #       Fleakr.token.should == @token
-   #     end
-   #     
-   #     should "cache the result" do
-   #       2.times { Fleakr.token }
-   #     end
-   #     
-   #   end
-   #   
-   end
+    
+    should "not have a token by default" do
+      Fleakr.expects(:mini_token).with().returns(nil)
+      Fleakr.expects(:auth_token).with().returns(nil)
+      Fleakr.expects(:frob).with().returns(nil)
+      
+      Fleakr.token.should be(nil)
+    end
+        
+    [:mini_token, :auth_token, :frob].each do |attribute|
+      should "reset_token when :#{attribute} is set" do
+        Fleakr.expects(:reset_token).with().at_least_once
+        Fleakr.send("#{attribute}=".to_sym, 'value')
+      end
+    end
+    
+    
+    context "when generating an AuthenticationToken from an auth_token string" do
+
+      setup do
+        @token = stub()
+        
+        Fleakr.expects(:auth_token).with().at_least_once.returns('abc123')
+        Fleakr::Objects::AuthenticationToken.expects(:from_auth_token).with('abc123').returns(@token)
+      end
+
+      # Make sure to clear the cache
+      teardown { Fleakr.auth_token = nil }
+      
+      should "return the token" do
+        Fleakr.token.should == @token
+      end
+      
+      should "cache the result" do
+        2.times { Fleakr.token }
+      end
+
+    end
+    
+    context "when generating an AuthenticationToken from a frob string" do
+
+      setup do
+        @token = stub()
+        
+        Fleakr.expects(:auth_token).with().at_least_once.returns(nil)
+        Fleakr.expects(:frob).with().at_least_once.returns('abc123')
+        Fleakr::Objects::AuthenticationToken.expects(:from_frob).with('abc123').returns(@token)
+      end
+
+      # Make sure to clear the cache
+      teardown { Fleakr.frob = nil }
+      
+      should "return the token" do
+        Fleakr.token.should == @token
+      end
+      
+      should "cache the result" do
+        2.times { Fleakr.token }
+      end
+
+    end
+    
+    context "when generating an AuthenticationToken from a mini_token string" do
+      
+      setup do
+        @token = stub()
+
+        Fleakr.expects(:auth_token).with().at_least_once.returns(nil)
+        Fleakr.expects(:mini_token).with().at_least_once.returns('123-123-123')
+        Fleakr::Objects::AuthenticationToken.expects(:from_mini_token).with('123-123-123').returns(@token)          
+      end
+      
+      # Make sure to clear the cache
+      teardown { Fleakr.mini_token = nil }
+      
+      should "return the token" do
+        Fleakr.token.should == @token
+      end
+      
+      should "cache the result" do
+        2.times { Fleakr.token }
+      end
+      
+    end
+    
+  end
   
 end

@@ -40,7 +40,7 @@ module Fleakr
       def_delegators :context, :next, :previous
 
       flickr_attribute :id, :from => ['@id', 'photoid']
-      flickr_attribute :title, :description, :secret, :posted, :taken, :url
+      flickr_attribute :title, :description, :secret, :posted, :taken, :url, :dateupload
       flickr_attribute :farm_id, :from => '@farm'
       flickr_attribute :server_id, :from => '@server'
       flickr_attribute :owner_id, :from => ['@owner', 'owner@nsid']

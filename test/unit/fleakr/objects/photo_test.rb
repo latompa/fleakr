@@ -67,12 +67,13 @@ module Fleakr::Objects
           @object = Photo.new(Hpricot.XML(read_fixture('people.getPublicPhotos')).at('rsp/photos/photo'))
         end
 
-        should_have_a_value_for :id        => '2924549350'
-        should_have_a_value_for :title     => 'Photo #1'
-        should_have_a_value_for :farm_id   => '4'
-        should_have_a_value_for :server_id => '3250'
-        should_have_a_value_for :secret    => 'cbc1804258'
-        should_have_a_value_for :owner_id  => '21775151@N06'
+        should_have_a_value_for :id         => '2924549350'
+        should_have_a_value_for :title      => 'Photo #1'
+        should_have_a_value_for :farm_id    => '4'
+        should_have_a_value_for :server_id  => '3250'
+        should_have_a_value_for :secret     => 'cbc1804258'
+        should_have_a_value_for :owner_id   => '21775151@N06'
+        should_have_a_value_for :dateupload => '555'
         
       end
       

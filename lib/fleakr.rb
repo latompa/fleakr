@@ -157,23 +157,14 @@ module Fleakr
   #
   [:mini_token, :auth_token, :frob].each do |attribute|
     class_eval <<-ACCESSOR
-      def self.#{attribute}=(#{attribute})
-<<<<<<< HEAD:lib/fleakr.rb
-        Thread.current[:#{attribute}] = #{attribute}
-=======
-       Fleakr.reset_token
-        Thread.current[:#{attribute}] = #{attribute}
-      end
-      
-      def self.#{attribute}
-        Thread.current[:#{attribute}]
->>>>>>> 9bd089e... added dateupload to photo class, made Fleakr.token accessed via Thead.current, fixed reset_token and added dateupload:lib/fleakr.rb
-      end
-      
-      def self.#{attribute}
-        Thread.current[:#{attribute}]
-      end
-      
+    def self.#{attribute}=(#{attribute})
+      Fleakr.reset_token
+      Thread.current[:#{attribute}] = #{attribute}
+    end
+
+    def self.#{attribute}
+      Thread.current[:#{attribute}]
+    end
     ACCESSOR
   end
   

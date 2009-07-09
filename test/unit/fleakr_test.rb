@@ -83,22 +83,12 @@ class FleakrTest < Test::Unit::TestCase
       Fleakr.token # twice
     end
     
-    
-    should "not have a token by default" do
-      Fleakr.expects(:mini_token).with().returns(nil)
-      Fleakr.expects(:auth_token).with().returns(nil)
-      Fleakr.expects(:frob).with().returns(nil)
-      
-      Fleakr.token.should be(nil)
-    end
-        
     [:mini_token, :auth_token, :frob].each do |attribute|
       should "reset_token when :#{attribute} is set" do
         Fleakr.expects(:reset_token).with().at_least_once
         Fleakr.send("#{attribute}=".to_sym, 'value')
       end
     end
-    
     
     context "when generating an AuthenticationToken from an auth_token string" do
 
